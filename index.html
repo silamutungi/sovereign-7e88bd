@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sovereign — Build Without Permission</title>
+  <meta name="description" content="Type an idea, get a live app you fully own. Your GitHub repo, your Vercel deployment, your Supabase database. No lock-in, no surprises." />
+  <meta property="og:title" content="Sovereign — Build Without Permission" />
+  <meta property="og:description" content="Type an idea, get a live app you fully own. Your code. Your infrastructure. Your future." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sovereign — Build Without Permission" />
+  <meta name="twitter:description" content="Type an idea, get a live app you fully own. No lock-in, no surprises." />
+  <link rel="canonical" href="/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Sovereign",
+    "applicationCategory": "DeveloperApplication",
+    "description": "Type an idea, get a live app you fully own. Your GitHub repo, your Vercel deployment, your Supabase database.",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --acid: #c8f060;
+      --bg: #0e0d0b;
+      --bg-raised: #1a1915;
+      --bg-surface: #232119;
+      --text: #f2efe8;
+      --text-muted: #a8a498;
+      --border: #2e2c26;
+      --serif: Georgia, 'Times New Roman', Times, serif;
+      --mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Courier New', monospace;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 96px;
+      --space-5xl: 128px;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 1rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: var(--acid); text-decoration: none; transition: opacity 0.15s ease; }
+    a:hover { opacity: 0.85; }
+    a:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; border-radius: 2px; }
+
+    /* ─── NAVIGATION ─────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      background: rgba(14, 13, 11, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span { color: var(--acid); }
+
+    .nav-links { display: flex; gap: var(--space-lg); align-items: center; }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: color 0.15s ease;
+      padding: var(--space-sm);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--acid) !important;
+      color: #0e0d0b !important;
+      font-weight: 700 !important;
+      font-size: 0.85rem !important;
+      padding: 10px 20px !important;
+      border-radius: 6px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(200, 240, 96, 0.25); }
+    .nav-cta:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+    /* ─── HERO ────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-5xl) var(--space-lg) var(--space-4xl);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--acid);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.75rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      color: var(--text);
+      margin-bottom: var(--space-lg);
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--acid);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: var(--space-2xl);
+      line-height: 1.7;
+    }
+
+    /* ─── IDEA INPUT ─────────────────────── */
+    .idea-input-wrap {
+      width: 100%;
+      max-width: 640px;
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+
+    .idea-input-wrap label {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .idea-visible-label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: var(--space-sm);
+      text-align: left;
+    }
+
+    .idea-input {
+      width: 100%;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 160px 18px 20px;
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      min-height: 56px;
+    }
+
+    .idea-input::placeholder { color: #767676; }
+    .idea-input:focus { border-color: var(--acid); box-shadow: 0 0 0 3px rgba(200, 240, 96, 0.15); }
+
+    .idea-btn {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      background: var(--acid);
+      color: #0e0d0b;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .idea-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(200, 240, 96, 0.3); }
+    .idea-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+    .idea-btn:active { transform: translateY(0); }
+
+    .hero-trust {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-trust span { display: flex; align-items: center; gap: 6px; }
+    .hero-trust .check { color: var(--acid); font-size: 1rem; }
+
+    /* ─── SECTION LAYOUT ─────────────────── */
+    section {
+      padding: var(--space-4xl) var(--space-lg);
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--acid);
+      margin-bottom: var(--space-md);
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: var(--space-lg);
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: var(--space-3xl);
+    }
+
+    /* ─── OWNERSHIP MANIFESTO ────────────── */
+    .manifesto {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4xl);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+    }
+
+    .compare-card {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: var(--space-xl);
+    }
+
+    .compare-card.them { opacity: 0.6; }
+
+    .compare-card h3 {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: var(--space-md);
+      color: var(--text);
+    }
+
+    .compare-card.us h3 { color: var(--acid); }
+
+    .compare-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .compare-card ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      padding-left: 24px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .compare-card ul li::before {
+      position: absolute;
+      left: 0;
+      font-size: 0.85rem;
+    }
+
+    .compare-card.them ul li::before { content: '✗'; color: #e45858; }
+    .compare-card.us ul li::before { content: '✓'; color: var(--acid); }
+
+    /* ─── HOW IT WORKS ───────────────────── */
+    .steps {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4xl);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+      counter-reset: step;
+    }
+
+    .step {
+      counter-increment: step;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: var(--space-xl);
+      position: relative;
+    }
+
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--acid);
+      opacity: 0.35;
+      line-height: 1;
+      display: block;
+      margin-bottom: var(--space-md);
+    }
+
+    .step h3 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-sm);
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ─── AUDIENCE TABS ──────────────────── */
+    .audience {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4xl);
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+    }
+
+    .audience-card {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: var(--space-2xl);
+    }
+
+    .audience-card .icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-md);
+      display: block;
+    }
+
+    .audience-card h3 {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-sm);
+    }
+
+    .audience-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: var(--space-md);
+    }
+
+    .audience-card .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .audience-card .feature-list li {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .audience-card .feature-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--acid);
+    }
+
+    /* ─── STACK SECTION ──────────────────── */
+    .stack {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4xl);
+    }
+
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+    }
+
+    .stack-item {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: var(--space-lg);
+      text-align: center;
+    }
+
+    .stack-item .stack-icon {
+      font-size: 1.75rem;
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+
+    .stack-item h4 {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-xs);
+    }
+
+    .stack-item p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── CTA SECTION ────────────────────── */
+    .final-cta {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4xl);
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .final-cta p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto var(--space-xl);
+      line-height: 1.7;
+    }
+
+    .btn-large {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--acid);
+      color: #0e0d0b;
+      font-family: var(--mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 18px 40px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      min-height: 56px;
+      min-width: 44px;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-large:hover { transform: translateY(-2px); box-shadow: 0 6px 32px rgba(200, 240, 96, 0.3); color: #0e0d0b; }
+    .btn-large:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+    .btn-large:active { transform: translateY(0); }
+
+    /* ─── FOOTER ──────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: var(--space-2xl) var(--space-lg);
+      max-width: 1080px;
+      margin: var(--space-4xl) auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+
+    .footer-brand {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: var(--space-sm);
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy {
+      width: 100%;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── RESPONSIVE ─────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: var(--space-sm) var(--space-md); }
+      .nav-links a:not(.nav-cta) { display: none; }
+
+      .hero { padding: var(--space-4xl) var(--space-md) var(--space-3xl); }
+
+      .idea-input { padding: 16px 16px 64px; }
+      .idea-btn { right: 8px; bottom: 8px; left: 8px; width: calc(100% - 16px); }
+
+      .compare-grid,
+      .steps-grid,
+      .audience-grid,
+      .stack-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section { padding: var(--space-3xl) var(--space-md); }
+
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 2.25rem; }
+      h2 { font-size: 1.75rem; }
+    }
+
+    /* ─── SKIP LINK ──────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: var(--space-md);
+      background: var(--acid);
+      color: #0e0d0b;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 700;
+      z-index: 200;
+      transition: top 0.2s ease;
+    }
+
+    .skip-link:focus { top: var(--space-md); }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- NAVIGATION -->
+  <nav role="navigation" aria-label="Main navigation">
+    <a href="/" class="nav-logo" aria-label="Sovereign home">Sovereign<span>.</span></a>
+    <div class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#who-its-for">Who it's for</a>
+      <a href="#stack">Stack</a>
+      <a href="#start" class="nav-cta">Start building</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-badge" aria-label="Status: Now in early access">
+        <span class="hero-badge-dot" aria-hidden="true"></span>
+        Now in early access
+      </div>
+      <h1 id="hero-heading">Every other platform makes you a <em>tenant</em>. We make you an <em>owner</em>.</h1>
+      <p class="hero-sub">Type an idea. Get a live app — deployed to your GitHub, your Vercel, your Supabase. Your code. Your infrastructure. Your future.</p>
+
+      <form class="idea-input-wrap" action="#" method="post" role="search" aria-label="Describe your app idea">
+        <span class="idea-visible-label" id="idea-label">Describe your app idea</span>
+        <label for="idea-field">Describe your app idea</label>
+        <input
+          id="idea-field"
+          class="idea-input"
+          type="text"
+          placeholder="A booking platform for independent yoga instructors..."
+          aria-labelledby="idea-label"
+          maxlength="500"
+          autocomplete="off"
+        />
+        <button type="submit" class="idea-btn">Build this →</button>
+      </form>
+
+      <div class="hero-trust" aria-label="Platform guarantees">
+        <span><span class="check" aria-hidden="true">✓</span> No lock-in</span>
+        <span><span class="check" aria-hidden="true">✓</span> No credits</span>
+        <span><span class="check" aria-hidden="true">✓</span> No surprises</span>
+        <span><span class="check" aria-hidden="true">✓</span> You own everything</span>
+      </div>
+    </section>
+
+    <!-- MANIFESTO: THEM VS US -->
+    <section class="manifesto" aria-labelledby="manifesto-heading">
+      <p class="section-label" aria-hidden="true">Ownership</p>
+      <h2 id="manifesto-heading">Stop renting your future</h2>
+      <p class="section-desc">Other platforms generate apps you can't export, can't inspect, and can't truly own. Sovereign is different by design.</p>
+      <div class="compare-grid" role="list">
+        <div class="compare-card them" role="listitem">
+          <h3>Every other platform</h3>
+          <ul>
+            <li>Code locked inside their editor</li>
+            <li>Hosting tied to their servers</li>
+            <li>Database you can't access directly</li>
+            <li>Pricing that scales against you</li>
+            <li>Leave and start from zero</li>
+          </ul>
+        </div>
+        <div class="compare-card us" role="listitem">
+          <h3>Sovereign</h3>
+          <ul>
+            <li>Full source code in your GitHub repo</li>
+            <li>Deployed to your own Vercel account</li>
+            <li>Your own Supabase database, full access</li>
+            <li>No per-app credits or hidden fees</li>
+            <li>Leave anytime — your code stays yours</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="steps" id="how-it-works" aria-labelledby="steps-heading">
+      <p class="section-label" aria-hidden="true">How it works</p>
+      <h2 id="steps-heading">Idea to live app in 60 seconds</h2>
+      <p class="section-desc">Three steps. No setup wizard. No configuration marathon. Just describe what you want.</p>
+      <div class="steps-grid" role="list">
+        <div class="step" role="listitem">
+          <h3>Describe your idea</h3>
+          <p>Type a sentence or a paragraph. Sovereign understands context, audience, and business model — then generates a complete app specification.</p>
+        </div>
+        <div class="step" role="listitem">
+          <h3>Review and deploy</h3>
+          <p>See your app live in seconds. Full-stack code, database schema, auth, payments — everything generated with security built in from line one.</p>
+        </div>
+        <div class="step" role="listitem">
+          <h3>Own it forever</h3>
+          <p>Code pushed to your GitHub. Site deployed to your Vercel. Data stored in your Supabase. Delete your Sovereign account — nothing changes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUDIENCE -->
+    <section class="audience" id="who-its-for" aria-labelledby="audience-heading">
+      <p class="section-label" aria-hidden="true">Who it's for</p>
+      <h2 id="audience-heading">Built for builders at every level</h2>
+      <p class="section-desc">Whether you've never written a line of code or you write code every day — Sovereign saves you the part you don't want to do.</p>
+      <div class="audience-grid" role="list">
+        <article class="audience-card" role="listitem">
+          <span class="icon" aria-hidden="true">💡</span>
+          <h3>Non-technical founders</h3>
+          <p>You have the idea, the domain expertise, and the customers. You just don't want to learn React to prove your concept works.</p>
+          <ul class="feature-list">
+            <li>Launch a real product, not a prototype</li>
+            <li>Bring it to a developer later — they'll understand the code</li>
+            <li>No vendor dependency, no technical debt trap</li>
+          </ul>
+        </article>
+        <article class="audience-card" role="listitem">
+          <span class="icon" aria-hidden="true">⌨️</span>
+          <h3>Developers who skip boilerplate</h3>
+          <p>You know how to build it. You just don't want to spend three days on auth, Stripe webhooks, RLS policies, and CI/CD before writing a single feature.</p>
+          <ul class="feature-list">
+            <li>Production-ready scaffolding in seconds</li>
+            <li>Security patterns you'd write yourself — already done</li>
+            <li>Clean code you can extend, refactor, or rewrite</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="stack" id="stack" aria-labelledby="stack-heading">
+      <p class="section-label" aria-hidden="true">The stack</p>
+      <h2 id="stack-heading">Industry-standard infrastructure you already trust</h2>
+      <p class="section-desc">No proprietary runtime. No custom hosting. Everything runs on tools with millions of users and battle-tested documentation.</p>
+      <div class="stack-grid" role="list">
+        <div class="stack-item" role="listitem">
+          <span class="stack-icon" aria-hidden="true">⚡</span>
+          <h4>Vercel</h4>
+          <p>Edge deployment, preview URLs, instant rollbacks</p>
+        </div>
+        <div class="stack-item" role="listitem">
+          <span class="stack-icon" aria-hidden="true">🗄️</span>
+          <h4>Supabase</h4>
+          <p>Postgres database, auth, storage, realtime</p>
+        </div>
+        <div class="stack-item" role="listitem">
+          <span class="stack-icon" aria-hidden="true">📦</span>
+          <h4>GitHub</h4>
+          <p>Full source code, version history, collaboration</p>
+        </div>
+        <div class="stack-item" role="listitem">
+          <span class="stack-icon" aria-hidden="true">💳</span>
+          <h4>Stripe</h4>
+          <p>Payments, subscriptions, invoicing — ready to go</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta" id="start" aria-labelledby="cta-heading">
+      <p class="section-label" aria-hidden="true">Get started</p>
+      <h2 id="cta-heading">Your code. Your infrastructure. Your future.</h2>
+      <p>Describe your idea and have a production-ready app deployed in under a minute. No credit card. No lock-in. No permission needed.</p>
+      <a href="#main-content" class="btn-large" role="button">Start building for free →</a>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <span class="footer-brand">Sovereign<span style="color: var(--acid);">.</span></span>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="mailto:hello@sovereign.app">Contact</a>
+      <a href="https://github.com/sovereign" aria-label="Sovereign on GitHub">GitHub</a>
+    </div>
+    <p class="footer-copy">&copy; 2025 Sovereign. Build without permission.</p>
+  </footer>
+</body>
+</html>
